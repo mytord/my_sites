@@ -1,0 +1,8 @@
+{% block content %}
+    <h1>Create Project Form</h1>
+    {%  if (form is not null) %}
+        <form action="{{ url('project_create') }}" method="POST" {{ form_enctype(form) }}>
+            {{ form_widget(form) }}
+        </form>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,6 @@
+<h1>Projects list</h1>
+<ul>
+    {% for project in projects %}
+        <li>{{ project.name|e }}</li>
+    {% endfor %}
+</ul>

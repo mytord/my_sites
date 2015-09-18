@@ -1,0 +1,41 @@
+parameters:
+    api.project.service.structure.path: %kernel.root_dir%/../web/projects
+    api.project.service.server.nginx.vhosts.path: %kernel.root_dir%/../web/uploads/vhosts
+    api.project.class: ApiBundle\Entity\Project
+    api.project.vhosts.root_domain: "mysites.prj"
+
+services:
+    api.project.listener:
+        class: ApiBundle\Service\EventListener
+        arguments: [ "@service_container" ]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postRemove  }
+
+    api.project.service:
+        class: ApiBundle\Service\ProjectService
+        calls:
+            - [ setProjectHandler, ["@api.project.handler"] ]
+            - [ setServer, ["@api.project.server.nginx"] ]
+            - [ setStructureFactory, ["@api.project.structure.factory"] ]
+
+    api.project.server.nginx:
+        class: ApiBundle\Service\Server\Nginx
+        calls:
+            - [ setVirtualHostPath, ["%api.project.service.server.nginx.vhosts.path%"] ]
+            - [ setFilesystem, ["@filesystem"] ]
+            - [ setTemplating, ["@templating"] ]
+            - [ setDomain, ["%api.project.vhosts.root_domain%"] ]
+
+    api.project.structure.html:
+        class: ApiBundle\Service\Structure\HTML
+        calls:
+            - [ setTemplating, ["@templating"] ]
+
+    api.project.structure.factory:
+        class: ApiBundle\Service\StructureFactory
+        arguments: [ "@service_container" ]
+
+    api.project.handler:
+        class: ApiBundle\Handler\ProjectHandler
+        arguments: [ "@doctrine.orm.entity_manager", "%api.project.class%", "@form.factory"]

@@ -1,0 +1,8 @@
+server {
+    listen 80;
+
+    root {{ host_root }};
+    index index.php index.html index.htm;
+
+    server_name {{ host_name }};
+}

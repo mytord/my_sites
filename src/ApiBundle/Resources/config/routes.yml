@@ -1,0 +1,42 @@
+project_view:
+    pattern: /projects/{id}
+    defaults: { _controller: ApiBundle:Project:view, _format: html }
+    methods: GET
+    requirements:
+        id: \d+
+
+project_create:
+    pattern: /projects
+    defaults: { _controller: ApiBundle:Project:create, _format: html }
+    methods: POST
+
+project_list:
+    pattern: /projects
+    defaults: { _controller: ApiBundle:Project:list, _format: html }
+    methods: GET
+
+project_new:
+    pattern: /projects/new
+    defaults: { _controller: ApiBundle:Project:new, _format: html }
+    methods: GET
+
+project_put:
+    pattern: /projects/{id}
+    defaults: { _controller: ApiBundle:Project:put, _format: html  }
+    methods: PUT
+    requirements:
+        id: \d+
+
+project_patch:
+    pattern: /projects/{id}
+    defaults: { _controller: ApiBundle:Project:patch, _format: html  }
+    methods: PATCH
+    requirements:
+        id: \d+
+
+project_delete:
+   pattern: /projects/{id}
+   defaults: { _controller: ApiBundle:Project:delete, _format: html  }
+   methods: DELETE
+   requirements:
+       id: \d+

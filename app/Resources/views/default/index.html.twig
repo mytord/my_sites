@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        <!-- Jquery.UI -->
+        <!-- <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"> -->
+        {% stylesheets '@jquery_and_ui_css' %}
+            <link rel="stylesheet" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+        <!-- jTable.UI -->
+        <link rel="stylesheet" href="{{ asset('bundles/app/jtable.2.4.0/themes/jqueryui/jquery-ui.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('bundles/app/jtable.2.4.0/themes/metro/blue/jtable.min.css') }}"/>
+    {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+<body>
+<div class="container">
+    <div id="sites_table_container"></div>
+</div>
+{% block javascripts %}
+    <!-- jQuery -->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+    <!-- jQuery UI -->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>-->
+    {% javascripts '@jquery_and_ui_js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <!-- jTable -->
+    <script src="{{ asset('bundles/app/jtable.2.4.0/jquery.jtable.min.js') }}"></script>
+    <script type="text/javascript">
+
+        function formatValidationErrorResponse(response) {
+            var sep = '<br/>';
+            var message = response.message + ':' + sep;
+
+            if(response.errors.errors) {
+                message += response.errors.errors.join(sep);
+            }
+
+            if(response.errors.children) {
+                $.each(response.errors.children, function() {
+                    if(this.errors) {
+                        message += this.errors.join(sep);
+                    }
+                });
+            }
+
+            return message;
+        }
+
+        $(document).ready(function() {
+            $('#sites_table_container').jtable({
+                title: 'MySites Registry',
+                paging: true,
+                sorting: true,
+                actions: {
+                    createAction: function (postData) {
+                        return $.Deferred(function ($dfd) {
+
+                            var $project = JSON.parse('{"' + decodeURI(postData).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
+                            $.ajax({
+                                url: '{{ url('project_create') }}',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: { project: $project },
+                                statusCode: {
+                                    201: function() {
+                                        // created
+                                        $dfd.resolve({
+                                            Result: "OK",
+                                            Record: $project
+                                        });
+                                    },
+                                    400: function(xhr) {
+                                        // validation errors
+                                        var response = JSON.parse(xhr.responseText);
+
+                                        $dfd.resolve({
+                                            Result: "ERROR",
+                                            Message: formatValidationErrorResponse(response)
+                                        });
+                                    },
+                                    500: function() {
+                                        // server errors
+                                        $dfd.reject();
+                                    }
+                                }
+                            });
+
+                        });
+                    },
+                    updateAction: function(postData) {
+
+                        var project = JSON.parse('{"' + decodeURI(postData).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+                        var projectId = project.id;
+
+                        delete project.id;
+
+                        return $.Deferred(function ($dfd) {
+                            $.ajax({
+                                url: '{{ url('project_patch', { id: 'PROJECT_ID' }) }}'.replace('PROJECT_ID', projectId),
+                                type: 'PATCH',
+                                dataType: 'json',
+                                data: { project: project },
+                                statusCode: {
+                                    204: function() {
+                                        // updated
+                                        $dfd.resolve({
+                                            Result: "OK"
+                                        });
+                                    },
+                                    400: function(xhr) {
+                                        // validation errors
+                                        var response = JSON.parse(xhr.responseText);
+
+                                        $dfd.resolve({
+                                            Result: "ERROR",
+                                            Message: formatValidationErrorResponse(response)
+                                        });
+                                    },
+                                    500: function() {
+                                        // server errors
+                                        $dfd.reject();
+                                    }
+                                }
+                            });
+                        });
+                    },
+                    deleteAction: function (postData) {
+                        return $.Deferred(function ($dfd) {
+
+                            $.ajax({
+                                url: '{{ url('project_delete', { id: 'PROJECT_ID' }) }}'.replace('PROJECT_ID', postData.id),
+                                type: 'DELETE',
+                                dataType: 'json',
+                                statusCode: {
+                                    204: function() {
+                                        // deleted
+                                        $dfd.resolve({
+                                            Result: "OK"
+                                        });
+                                    },
+                                    500: function() {
+                                        // server errors
+                                        $dfd.reject();
+                                    }
+                                }
+                            });
+                        });
+                    },
+                    listAction: function(postData, jtParams) {
+                        return $.Deferred(function($dfd) {
+                            $.ajax({
+                                url: '{{ url('project_list') }}',
+                                type: 'GET',
+                                dataType: 'json',
+                                data: {
+                                    limit: jtParams.jtPageSize,
+                                    offset: jtParams.jtStartIndex,
+                                    sorting: jtParams.jtSorting
+                                },
+                                statusCode: {
+                                    200: function(data) {
+                                        // show list
+                                        $dfd.resolve({
+                                            Result: "OK",
+                                            Records: data.projects,
+                                            TotalRecordCount: data.projects_total
+                                        });
+                                    },
+                                    500: function() {
+                                        // server errors
+                                        $dfd.reject();
+                                    }
+                                }
+                            });
+                        });
+                    }
+                },
+                fields: {
+                    id: {
+                        key: true,
+                        create: false,
+                        edit: false,
+                        list: false
+                    },
+                    name: {
+                        title: 'Project name'
+                    },
+                    alias: {
+                        title: 'Project alias',
+                        edit: false,
+                        list: false
+                    },
+                    type_id: {
+                        title: 'Structure',
+                        edit: false,
+                        options: { 1: 'Simple HTML' }
+                    },
+                    description: {
+                        title: 'Description'
+                    },
+                    created_at: {
+                        title: 'Created At',
+                        create: false,
+                        edit: false
+                        //type: 'date',
+                        //displayFormat: 'yy-mm-dd'
+                    },
+                    updated_at: {
+                        title: 'Updated At',
+                        create: false,
+                        edit: false
+                    }
+                }
+            }).jtable('load');
+        });
+    </script>
+{% endblock %}
+</body>
+</html>
+
