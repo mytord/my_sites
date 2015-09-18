@@ -103,7 +103,7 @@
 
                         return $.Deferred(function ($dfd) {
                             $.ajax({
-                                url: '{{ url('project_patch', { id: 'PROJECT_ID' }) }}'.replace('PROJECT_ID', projectId),
+                                url: '{{ url('project_patch', { id: 666 }) }}'.replace(666, projectId),
                                 type: 'PATCH',
                                 dataType: 'json',
                                 data: { project: project },
