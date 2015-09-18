@@ -22,6 +22,8 @@
 4. `php app/console server:run`
 5. Пробуем создать проект: `curl -X POST -d '{"project": {"name": "Test name", "alias": "test_project", "type_id": 1}}' http://localhost:8000/app_dev.php/api/projects --header "Content-Type:application/json" -v`
 
+Документация по REST API доступна по ссылке `/api/doc`
+
 Этапы создания нового проекта
 --------------
 1. Добавление проекта в базу данных.
