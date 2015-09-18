@@ -17,6 +17,7 @@
 !/web/projects/index.html
 /web/uploads/*
 !/web/uploads/index.html
+!/web/uploads/vhosts/index.html
 /web/css
 /web/js
 /web/assetic
