@@ -8,7 +8,7 @@
 
 Особенности
 --------------
-* Бакенд - Symfony2
+* Бекенд - Symfony2
 * База данных - MySQL
 * Фронтенд - jTable
 * REST API - FOS\RestBundle
