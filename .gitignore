@@ -15,7 +15,7 @@
 *.error.log
 /web/projects/*
 !/web/projects/index.html
-/web/uploads/*
+/web/uploads/vhosts/*
 !/web/uploads/index.html
 !/web/uploads/vhosts/index.html
 /web/css
