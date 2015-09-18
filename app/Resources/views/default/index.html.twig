@@ -135,7 +135,7 @@
                         return $.Deferred(function ($dfd) {
 
                             $.ajax({
-                                url: '{{ url('project_delete', { id: 'PROJECT_ID' }) }}'.replace('PROJECT_ID', postData.id),
+                                url: '{{ url('project_delete', { id: 666 }) }}'.replace(666, postData.id),
                                 type: 'DELETE',
                                 dataType: 'json',
                                 statusCode: {
@@ -209,8 +209,6 @@
                         title: 'Created At',
                         create: false,
                         edit: false
-                        //type: 'date',
-                        //displayFormat: 'yy-mm-dd'
                     },
                     updated_at: {
                         title: 'Updated At',
