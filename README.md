@@ -17,10 +17,12 @@
 --------------
 
 1. `composer update --verbose`
-2. `php app/console doctrine:install`
+2. `php app/console doctrine:database:create`
 3. `php app/console doctrine:schema:create`
-4. `php app/console server:run`
-5. Пробуем создать проект: `curl -X POST -d '{"project": {"name": "Test name", "alias": "test_project", "type_id": 1}}' http://localhost:8000/app_dev.php/api/projects --header "Content-Type:application/json" -v`
+4. Устанавливаем права на запись в директории, в которых будут храниться проекты и виртуальные хосты (по умолчанию: `web/projects` и `web/uploads/vhosts`)
+5. Запускаем тесты: `bin/phpunit -c app`
+6. Запускаем сервер: `php app/console server:run`
+7. Пробуем создать проект: `curl -X POST -d '{"project": {"name": "Test name", "alias": "test_project", "type_id": 1}}' http://localhost:8000/api/projects --header "Content-Type:application/json" -v`
 
 Документация по REST API доступна по ссылке `/api/doc`
 
