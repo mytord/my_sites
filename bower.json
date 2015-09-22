@@ -1,0 +1,20 @@
+{
+  "name": "my_sites",
+  "version": "0.0.0",
+  "homepage": "https://github.com/mytord/my_sites",
+  "authors": [
+    "mytord <quattrogen@yandex.ru>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-ui": "git://github.com/components/jqueryui#~1.11.4",
+    "jtable": "~2.4.0"
+  }
+}

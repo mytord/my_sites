@@ -7,13 +7,10 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
         <!-- Jquery.UI -->
-        <!-- <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"> -->
-        {% stylesheets '@jquery_and_ui_css' %}
-            <link rel="stylesheet" href="{{ asset_url }}"/>
-        {% endstylesheets %}
+        <link rel="stylesheet" href="{{ asset('assets/vendor/jquery.ui/themes/base/all.css') }}"/>
         <!-- jTable.UI -->
-        <link rel="stylesheet" href="{{ asset('bundles/app/jtable.2.4.0/themes/jqueryui/jquery-ui.css') }}"/>
-        <link rel="stylesheet" href="{{ asset('bundles/app/jtable.2.4.0/themes/metro/blue/jtable.min.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('assets/vendor/jtable/lib/themes/metro/blue/jtable.min.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('bundles/app/css/jquery-ui.css') }}"/>
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
@@ -23,14 +20,12 @@
 </div>
 {% block javascripts %}
     <!-- jQuery -->
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+    <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
     <!-- jQuery UI -->
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>-->
-    {% javascripts '@jquery_and_ui_js' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
+
     <!-- jTable -->
-    <script src="{{ asset('bundles/app/jtable.2.4.0/jquery.jtable.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jtable/lib/jquery.jtable.min.js') }}"></script>
     <script type="text/javascript">
 
         function formatValidationErrorResponse(response) {
